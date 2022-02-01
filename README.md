@@ -1,6 +1,19 @@
 # students-internships
 
-## Description
+## Table of contents
+ - [Description](#description)
+ - [Dev Setup](#dev-setup)
+ - [Running the application locally](#running-the-application-locally)
+   * [Running docker containers](#running-docker-containers)
+   * [Run App](#run-app)
+   * [Run Interface](#run-interface)
+   * [Linting](#linting)
+   * [Database operations](#database-operations)
+ - [Components](#components)
+   * [Components Diagram](#component-diagram) 
+
+
+# Description
 
 The system consists of 5 docker containers running small microservices:
 
@@ -9,8 +22,11 @@ The system consists of 5 docker containers running small microservices:
 3. DB -> a postgresql database
 4. Censor -> a censoring script that takes descriptions from students details and removes profanity
 5. RabbitMQ -> a rabbitmq queue that is used in the censoring process
+6. ModerationBackend -> a moderation server serving the moderation interface
+7. Redis -> a redis DB for moderation of data
+8. ModerationFrontend -> a moderation interface to view all profanity descriptions
 
-## Dev Setup
+# Dev Setup
 
 Before installing any Python packages it would be better to create a virtual environment for the app. Best to use pyenv.
 See here: https://akrabat.com/creating-virtual-environments-with-pyenv/
@@ -27,6 +43,8 @@ When installing new Python packages make sure to freeze it:
 (Be sure that you are in the virtual env for the project and not add unnecessary packages)
 
 
+#Running the application locally
+
 ## Running docker containers
 
 `make wakeup-database` -> creates the db
@@ -41,6 +59,8 @@ When installing new Python packages make sure to freeze it:
 
 `make compose-censor` -> runs the censoring script
 
+`make compose-redis` -> runs the redis db
+
 ## Run App
 
 `make run`
@@ -49,11 +69,12 @@ When installing new Python packages make sure to freeze it:
  
  `make run HOST="127.0.0.5" port=8081`
 
-### Run interface
+## Run interface
 
 `make run-interface`
 
 ## Linting
+
 Linting the whole project:
 
 `make lint`
@@ -66,7 +87,6 @@ Linting the frontend:
 
 `make lint-frontend`
 
-
 ## Database operations
 
 We are using a postgresql database called _students_internships_db_. Make sure to create it before running the migration.
@@ -76,4 +96,16 @@ To create all tables:
 
 To create a new revision:
 `make revision MESSAGE=desired_message`
+
+# Components
+
+## Component Diagram
+![Components Diagram](./Diagrams/ContainerDiagram.png)
+
+
+## Sequence Diagram
+
+This diagram present the entire flow of adding a profanity description in the user profile
+
+![Sequence Diagram](./Diagrams/SequenceDiagramCensor.png)
 
